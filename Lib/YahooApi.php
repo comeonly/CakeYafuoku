@@ -32,7 +32,7 @@ class YahooApi extends CurlUtility {
  *
  * @var string
  */
-	protected static $_appid = 'y9qJ5quxg66ygOcVVxD4DONMKoMppZS7Beiswf.BhMh.VFcOsIY5DjRerI8HSx7BJKrU';
+	protected static $_appid = '<your_app_id';
 
 /**
  * yConnect method set oauth token
