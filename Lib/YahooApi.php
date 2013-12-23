@@ -49,6 +49,16 @@ class YahooApi extends CurlUtility {
 		);
 		$body = self::getBody($url);
 		$queryPath = htmlqp($body);
+		$action = $queryPath->find("form")->attr('action');
+
+		if ($action === '/yconnect/v1/grant') {
+			$url = 'https://auth.login.yahoo.co.jp/yconnect/v1/grant';
+			$params = self::formValues($queryPath);
+			$query = http_build_query($params);
+			$body = self::getBody($url . '/?' . $query);
+			$queryPath = htmlqp($body);
+		}
+
 		$opauth = $queryPath->find("input[name='opauth']")->attr('value');
 		$authResponse = unserialize(base64_decode($opauth));
 

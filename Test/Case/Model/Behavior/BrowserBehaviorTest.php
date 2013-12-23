@@ -10,6 +10,35 @@
  */
 
 /**
+ * TheVoid class
+ *
+ * @package       Cake.Test.Case.Model
+ */
+class VoidYafuokuModel extends CakeTestModel {
+
+/**
+ * name property
+ *
+ * @var string 'TheVoid'
+ */
+	public $name = 'VoidYafuokuModel';
+
+/**
+ * useTable property
+ *
+ * @var bool false
+ */
+	public $useTable = false;
+
+/**
+ * actsAs property
+ *
+ * @var array
+ */
+	public $actsAs = array('CakeYafuoku.Browser');
+}
+
+/**
  * YafuokuTestCase
  *
  * @package YafuokuBrowser
@@ -18,110 +47,34 @@
 class YafuokuTest extends CakeTestCase {
 
 /**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = array();
-
-/**
- * testAccount
- *
- * @var array
- */
-	public $testAccount = array(
-		'id' => '<your_account>',
-		'pass' => '<your_pass>'
-	);
-
-/**
- * testSellingItem
- *
- * @var array
- */
-	public $testSellingItem = array(
-		'url' => 'http://page17.auctions.yahoo.co.jp/jp/auction/v0000000000',
-		'access' => 0,
-		'watch' => 0,
-		'store_keyword' => 'foobar',
-	);
-
-/**
- * testFullBaseUrl
- *
- * @var string
- */
-	public $testFullBaseUrl = 'http://localhost/yafuoku';
-
-/**
- * testReExhibitItem
- *
- * @var array
- */
-	public $testReExhibitItem = array(
-		'url' => 'http://page19.auctions.yahoo.co.jp/jp/auction/x111111111',
-		'StartPrice' => '100000',
-		'BidOrBuyPrice' => ''
-	);
-
-/**
- * testSoldList
- *
- * @var array
- */
-	public $testSoldList = array(array(
-		'ResultSet' => array(
-			'totalResultsAvailable' => 777,
-			'Result' => array(
-				array(
-					'AuctionID' => 't999999999',
-				)
-			)
-		)
-	));
-
-/**
- * testNotSoldList
- *
- * @var array
- */
-	public $testNotSoldList = array(array(
-		'ResultSet' => array(
-			'totalResultsAvailable' => 999,
-			'Result' => array(
-				array(
-					'AuctionID' => 'x999999999',
-				)
-		)
-	)
-	));
-
-/**
- * testSellingList
- *
- * @var array
- */
-	public $testSellingList = array(array(
-		'ResultSet' => array(
-			'totalResultsAvailable' => 777,
-			'Result' => array(
-				array(
-					'AuctionID' => 'p888888888',
-				)
-		)
-	)
-	));
-
-/**
  * setUp
  *
  * @return void
  */
 	public function setUp() {
-		parent::setUp();
-		$this->Article = ClassRegistry::init('Article');
-		$this->Article->Behaviors->attach('Yafuoku.Browser');
-		$this->Article->Behaviors->load('Browser', $this->testAccount);
+		$this->cookieFilePath =
+		$this->testCase = array(
+			'sellingUrl' => 'http://page19.auctions.yahoo.co.jp/jp/auction/x299208220',
+			'watch' => 14,
+			'store_keyword' => '#1003ⅶ∈∇リクライニング北欧モダン',
+			'exhibitUrl' => 'http://page22.auctions.yahoo.co.jp/jp/auction/l205446575',
+			'StartPrice' => '28000'
+		);
+
+		$this->Model = new VoidYafuokuModel();
+		$this->Model->Behaviors->load('CakeYafuoku.Browser', array(
+			'id' => 'izuya_market',
+			'pass' => 'aaa888',
+			'cookieFilePath' => TMP . 'testCakeYafuoku' . DS . 'izuya_market.cookie',
+			'log' => true,
+			'fullBaseUrl' => 'http://localhost/noah'
+			// 'id' => '<your_account>',
+			// 'pass' => '<your_pass>'
+			// 'cookieFilePath' => null,
+			// 'userAgent' => 'Mozilla/5.0 (Windows NT 6.1; rv:5.0) Gecko/20100101 Firefox/5.02',
+			// 'log' => true,
+			// 'fullBaseUrl' => FULL_BASE_URL
+		));
 	}
 
 /**
@@ -131,7 +84,7 @@ class YafuokuTest extends CakeTestCase {
  */
 	public function tearDown() {
 		parent::tearDown();
-		unset($this->Article);
+		unset($this->Model);
 	}
 
 /**
@@ -141,31 +94,30 @@ class YafuokuTest extends CakeTestCase {
  * @author Atunori Kamori <atunori.kamori@gmail.com>
  */
 	public function testLogin() {
-		$dir = TMP . 'cookies';
-		if (!file_exists($dir)) {
-			return;
-		}
-		$dhandle = opendir($dir);
-		if ($dhandle) {
-			while (false !== ($fname = readdir($dhandle))) {
-				if (is_dir( "{$dir}/{$fname}" )) {
-					if (($fname != '.') && ($fname != '..')) {
-						$this->rmdir_all("$dir/$fname");
+		$dir = dirname($this->cookieFilePath);
+		if (file_exists($dir)) {
+			$dhandle = opendir($dir);
+			if ($dhandle) {
+				while (false !== ($fname = readdir($dhandle))) {
+					if (is_dir($dir . DS . $fname)) {
+						if (($fname != '.') && ($fname != '..')) {
+							$this->rmdir_all($dir . DS . $fname);
+						}
+					} else {
+						unlink($dir . DS . $fname);
 					}
-				} else {
-					unlink("{$dir}/{$fname}");
 				}
+				closedir($dhandle);
 			}
-			closedir($dhandle);
+			rmdir($dir);
 		}
-		rmdir($dir);
-		$this->assertTrue($this->Article->login());
+		$this->assertTrue($this->Model->login());
 
-		$this->Article->Behaviors->load('Browser', array(
+		$this->Model->Behaviors->load('Browser', array(
 			'id' => null,
 			'pass' => null
 		));
-		$this->assertFalse($this->Article->login());
+		$this->assertFalse($this->Model->login());
 	}
 
 /**
@@ -175,10 +127,9 @@ class YafuokuTest extends CakeTestCase {
  * @author Atunori Kamori <atunori.kamori@gmail.com>
  */
 	public function testItemInfoFromCurl() {
-		$itemInfo = $this->Article->itemInfoFromCurl($this->testSellingItem['url']);
-		// $this->assertEquals($this->testSellingItem['access'], $itemInfo['access']);
-		$this->assertEquals($this->testSellingItem['watch'], $itemInfo['watch']);
-		$this->assertEquals($this->testSellingItem['store_keyword'], $itemInfo['store_keyword']);
+		$itemInfo = $this->Model->itemInfoFromCurl($this->testCase['sellingUrl']);
+		$this->assertEquals($this->testCase['watch'], $itemInfo['watch']);
+		$this->assertEquals($this->testCase['store_keyword'], $itemInfo['store_keyword']);
 	}
 
 /**
@@ -189,59 +140,67 @@ class YafuokuTest extends CakeTestCase {
  */
 	public function testItemList() {
 		// use api closed list
-		$this->Article->Behaviors->load('Browser', array(
-			'fullBaseUrl' => $this->testFullBaseUrl,
-		));
-		$list = $this->Article->itemList('closed', true);
-		$this->assertEquals(
-			$this->testSoldList[0]['ResultSet']['totalResultsAvailable'],
-			$list[0]['ResultSet']['totalResultsAvailable']
-		);
-		$this->assertTrue(array_key_exists(
-			'AuctionID',
-			$list[0]['ResultSet']['Result'][0]
-		));
-		$list = $this->Article->itemList('closed', false);
-		$this->assertEquals(
-			$this->testNotSoldList[0]['ResultSet']['totalResultsAvailable'],
-			$list[0]['ResultSet']['totalResultsAvailable']
-		);
-		$this->assertTrue(array_key_exists(
-			'AuctionID',
-			$list[0]['ResultSet']['Result'][0]
-		));
+		$list = $this->Model->itemList('closed', true);
+
+		$result = array_key_exists('ResultSet', $list[0]);
+		$this->assertTrue($result);
+
+		$totalResults = $list[0]['ResultSet']['totalResultsAvailable'];
+		if ($totalResults > 0) {
+			$item = $list[0]['ResultSet']['Result'][0];
+
+			$result = array_key_exists('AuctionID', $item);
+			$this->assertTrue($result);
+		}
+
+		$list = $this->Model->itemList('closed', false);
+
+		$result = array_key_exists('ResultSet', $list[0]);
+		$this->assertTrue($result);
+
+		$totalResults = $list[0]['ResultSet']['totalResultsAvailable'];
+		if ($totalResults > 0) {
+			$item = $list[0]['ResultSet']['Result'][0];
+
+			$result = array_key_exists('AuctionID', $item);
+			$this->assertTrue($result);
+		}
 
 		// use api selling list
-		$list = $this->Article->itemList('selling');
-		$this->assertEquals(
-			$this->testSellingList[0]['ResultSet']['totalResultsAvailable'],
-			$list[0]['ResultSet']['totalResultsAvailable']
-		);
-		$this->assertTrue(array_key_exists(
-			'AuctionID',
-			$list[0]['ResultSet']['Result'][0]
-		));
+		$list = $this->Model->itemList('selling');
+
+		$result = array_key_exists('ResultSet', $list[0]);
+		$this->assertTrue($result);
+
+		$totalResults = $list[0]['ResultSet']['totalResultsAvailable'];
+		if ($totalResults > 0) {
+			$item = $list[0]['ResultSet']['Result'][0];
+
+			$result = array_key_exists('AuctionID', $item);
+			$this->assertTrue($result);
+		}
 
 		// use curl scraping
-		$this->Article->Behaviors->load('Browser', array(
+		$this->Model->Behaviors->load('Browser', array(
 			'fullBaseUrl' => ''
 		));
-		$list = $this->Article->itemList('closed', true);
-		$this->assertEquals(
-			$this->testSoldList[0]['ResultSet']['Result'][0]['AuctionID'],
-			$list[0][0]['auctionId']
-		);
-		$list = $this->Article->itemList('closed', false);
-		$this->assertEquals(
-			$this->testNotSoldList[0]['ResultSet']['Result'][0]['AuctionID'],
-			$list[0][0]['auctionId']
-		);
+		$list = $this->Model->itemList('closed', true);
+		if (count($list) > 0) {
+			$result = array_key_exists('auctionId', $list[0][0]);
+			$this->assertTrue($result);
+		}
 
-		$list = $this->Article->itemList('selling');
-		$this->assertEquals(
-			$this->testSellingList[0]['ResultSet']['Result'][0]['AuctionID'],
-			$list[0][0]['auctionId']
-		);
+		$list = $this->Model->itemList('closed', false);
+		if (count($list) > 0) {
+			$result = array_key_exists('auctionId', $list[0][0]);
+			$this->assertTrue($result);
+		}
+
+		$list = $this->Model->itemList('selling');
+		if (count($list) > 0) {
+			$result = array_key_exists('auctionId', $list[0][0]);
+			$this->assertTrue($result);
+		}
 	}
 
 /**
@@ -251,7 +210,9 @@ class YafuokuTest extends CakeTestCase {
  * @author Atunori Kamori <atunori.kamori@gmail.com>
  */
 	public function testReExhibit() {
-		$result = $this->Article->reExhibit($this->testReExhibitItem['url']);
+		$url = $this->testCase['exhibitUrl'];
+		$option['StartPrice'] = $this->testCase['StartPrice'];
+		$result = $this->Model->reExhibit($url, $option);
 		$result = $result ? true : false;
 		$this->assertTrue($result);
 	}
@@ -263,7 +224,7 @@ class YafuokuTest extends CakeTestCase {
  * @author Atunori Kamori <atunori.kamori@gmail.com>
  */
 	public function testCancelAuction() {
-		$result = $this->Article->cancelAuction($this->testReExhibitItem['url']);
+		$result = $this->Model->cancelAuction($this->testCase['exhibitUrl']);
 		$this->assertTrue($result);
 	}
 

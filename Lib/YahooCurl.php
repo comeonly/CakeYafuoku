@@ -12,19 +12,19 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Yafuoku.Lib
+ * @package       CakeYafuoku.Lib
  * @since         Yafuoku 0.1
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  **/
 
-App::uses('YahooLogin', 'Yafuoku.Lib');
-App::uses('YahooReExhibit', 'Yafuoku.Lib');
-App::uses('CurlUtility', 'Yafuoku.Lib');
+App::uses('YahooLogin', 'CakeYafuoku.Lib');
+App::uses('YahooReExhibit', 'CakeYafuoku.Lib');
+App::uses('CurlUtility', 'CakeYafuoku.Lib');
 
 /**
  * Class YahooCurl
  *
- * @package       Yafuoku.Lib
+ * @package       CakeYafuoku.Lib
  * @since         Yafuoku 0.1
  */
 class YahooCurl extends CurlUtility {
@@ -135,6 +135,7 @@ class YahooCurl extends CurlUtility {
  * @author Atunori Kamori <atunori.kamori@gmail.com>
  */
 	public function soldList($queryPath) {
+		$list = array();
 		$queryPath = $queryPath->find('tr');
 		$count = $queryPath->size() - 2;
 		for ($i = 1; $i < $count; $i++) {
@@ -682,11 +683,11 @@ class YahooCurl extends CurlUtility {
 	}
 
 /**
- * cancelAuction method re-exhibit
+ * cancelAuction method
  *
- * @param array $settings curl and yahoo settings
- * @param string $url     target item url
- * @param string $error   error
+ * @param array  $settings curl and yahoo settings
+ * @param string $url      target item url
+ * @param string $error    error
  * @return void
  * @author Atunori Kamori <atunori.kamori@gmail.com>
  */

@@ -12,7 +12,7 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Yafuoku.Lib
+ * @package       CakeYafuoku.Lib
  * @since         Yafuoku 0.1
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  **/
@@ -20,7 +20,7 @@
 /**
  * Class CurlUtility
  *
- * @package       Yafuoku.Lib
+ * @package       CakeYafuoku.Lib
  * @since         Yafuoku 0.1
  */
 class CurlUtility {
@@ -69,9 +69,6 @@ class CurlUtility {
 			curl_setopt($this->curlHandler, CURLOPT_VERBOSE, true);
 			curl_setopt($this->curlHandler, CURLOPT_STDERR, $this->filePointer);
 		}
-		if (!$settings['cookieFilePath']) {
-			$settings['cookieFilePath'] = TMP . 'cookies/' . $settings['id'] . '.cookie';
-		}
 		curl_setopt($this->curlHandler, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($this->curlHandler, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($this->curlHandler, CURLOPT_AUTOREFERER, 1);
@@ -79,8 +76,9 @@ class CurlUtility {
 			curl_setopt($this->curlHandler, CURLOPT_USERAGENT, $settings['userAgent']);
 		}
 		if ($settings['cookieFilePath']) {
-			if (!file_exists(TMP . 'cookies')) {
-				mkdir(TMP . 'cookies');
+			$dir = dirname($settings['cookieFilePath']);
+			if (!file_exists($dir)) {
+				mkdir($dir);
 			}
 			curl_setopt($this->curlHandler, CURLOPT_COOKIEFILE, $settings['cookieFilePath']);
 			curl_setopt($this->curlHandler, CURLOPT_COOKIEJAR, $settings['cookieFilePath']);

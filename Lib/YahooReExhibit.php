@@ -17,7 +17,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  **/
 
-App::uses('CurlUtility', 'Yafuoku.Lib');
+App::uses('CurlUtility', 'CakeYafuoku.Lib');
 
 /**
  * Class YahooReExhibit
@@ -73,7 +73,7 @@ class YahooReExhibit extends CurlUtility {
 			if (array_key_exists($name, $option)) {
 				if (is_array($option[$name])) {
 					if ($name === 'Description') {
-						$params[$name] = $this->initExhibitDescription(
+						$params[$name] = self::initExhibitDescription(
 							$params[$name],
 							$option[$name]
 						);
@@ -83,6 +83,7 @@ class YahooReExhibit extends CurlUtility {
 				$params[$name] = $option[$name];
 			}
 		}
+		$params['Description'] = self::initExhibitDescription($params['Description']);
 
 		// Maybe: need this coz this runinng as javascript on original
 		$params['Description_plain'] = str_replace(
@@ -95,7 +96,7 @@ class YahooReExhibit extends CurlUtility {
 			$params[$name] = mb_convert_encoding($value, 'EUC-JP', 'UTF-8');
 		}
 
-		CurlUtility::setPostFields($params);
+		self::setPostFields($params);
 
 		return $url;
 	}

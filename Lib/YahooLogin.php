@@ -12,17 +12,17 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Yafuoku.Lib
+ * @package       CakeYafuoku.Lib
  * @since         Yafuoku 0.1
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  **/
 
-App::uses('CurlUtility', 'Yafuoku.Lib');
+App::uses('CurlUtility', 'CakeYafuoku.Lib');
 
 /**
  * Class YahooLogin
  *
- * @package       Yafuoku.Lib
+ * @package       CakeYafuoku.Lib
  * @since         Yafuoku 0.1
  */
 class YahooLogin extends CurlUtility {

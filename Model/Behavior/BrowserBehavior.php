@@ -1,6 +1,6 @@
 <?php
 /**
- * Yafuoku BrowserBehavior
+ * CakeYafuoku BrowserBehavior
  *
  * PHP 5
  *
@@ -12,14 +12,14 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @package       Yafuoku.Model.Behavior
+ * @package       CakeYafuoku.Model.Behavior
  * @since         Yafuoku 0.1
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('YahooCurl', 'Yafuoku.Lib');
-App::uses('YahooLogin', 'Yafuoku.Lib');
-App::uses('YahooApi', 'Yafuoku.Lib');
+App::uses('YahooCurl', 'CakeYafuoku.Lib');
+App::uses('YahooLogin', 'CakeYafuoku.Lib');
+App::uses('YahooApi', 'CakeYafuoku.Lib');
 
 /**
  * Class BrowserBehavior
