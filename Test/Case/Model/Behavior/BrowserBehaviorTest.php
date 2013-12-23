@@ -54,20 +54,15 @@ class YafuokuTest extends CakeTestCase {
 	public function setUp() {
 		$this->cookieFilePath =
 		$this->testCase = array(
-			'sellingUrl' => 'http://page19.auctions.yahoo.co.jp/jp/auction/x299208220',
-			'watch' => 14,
-			'store_keyword' => '#1003ⅶ∈∇リクライニング北欧モダン',
-			'exhibitUrl' => 'http://page22.auctions.yahoo.co.jp/jp/auction/l205446575',
-			'StartPrice' => '28000'
+			'sellingUrl' => 'http://',
+			'watch' => 0,
+			'store_keyword' => '',
+			'exhibitUrl' => 'http://',
+			'StartPrice' => '10000000'
 		);
 
 		$this->Model = new VoidYafuokuModel();
 		$this->Model->Behaviors->load('CakeYafuoku.Browser', array(
-			'id' => 'izuya_market',
-			'pass' => 'aaa888',
-			'cookieFilePath' => TMP . 'testCakeYafuoku' . DS . 'izuya_market.cookie',
-			'log' => true,
-			'fullBaseUrl' => 'http://localhost/noah'
 			// 'id' => '<your_account>',
 			// 'pass' => '<your_pass>'
 			// 'cookieFilePath' => null,
